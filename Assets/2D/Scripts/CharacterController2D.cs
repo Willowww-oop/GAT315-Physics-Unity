@@ -11,6 +11,10 @@ public class CharacterController2D : MonoBehaviour
     Rigidbody2D rb;
     Vector2 force;
 
+    Vector2 direction;
+
+    public void OnMove(Vector2 v) => direction = v;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,15 +23,11 @@ public class CharacterController2D : MonoBehaviour
     void Update()
     {
         Vector2 direction = Vector2.zero;
-        direction.x = Input.GetAxis("Horizontal");
+
+
+        // direction.x = Input.GetAxis("Horizontal");
 
         force = direction * speed;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
-        }
-
 
         animator.SetFloat("Speed", Mathf.Abs(direction.x));
 
@@ -36,11 +36,22 @@ public class CharacterController2D : MonoBehaviour
 
     }
 
-    void FixedUpdate()
+    public void OnJump()
     {
-        rb.linearVelocity = new Vector2(force.x, rb.linearVelocity.y);
+        rb.AddForce(Vector3.up * Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight), ForceMode2D.Impulse);
 
-        //rb.AddForce(force, ForceMode2D.Force);
+        animator.SetTrigger("Jump");
     }
+
+    public void OnAttack()
+    {
+
+    }
+
+    public void OnDeath()
+    {
+
+    }
+    
 }
 
