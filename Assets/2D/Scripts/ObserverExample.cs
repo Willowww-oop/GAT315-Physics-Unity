@@ -19,9 +19,12 @@ public class ObserverExample : MonoBehaviour
 	void Start()
 	{
 		// Subscribe methods to delegates using += operator (multicast delegates)
+
+		//onFunctionStart.AddListener(FunctionStart1());
+
 		onFunctionStart += FunctionStart1;   // Add FunctionStart1 to onFunctionStart delegate chain
 		onFunctionStart += FunctionStart2;   // Add FunctionStart2 to onFunctionStart delegate chain
-		onFunctionStop = FunctionStop;      // Add FunctionStop to onFunctionStop delegate
+	    onFunctionStop = FunctionStop;      // Add FunctionStop to onFunctionStop delegate
 	}
 
 	void Update()
@@ -42,17 +45,17 @@ public class ObserverExample : MonoBehaviour
 	}
 
 	// Methods that match the delegate signatures
-	void FunctionStart1()
+	public void FunctionStart1()
 	{
 		print("start1");  // Will be called when onFunctionStart is invoked
 	}
 
-	void FunctionStart2()
+	public void FunctionStart2()
 	{
 		print("start2");  // Will also be called when onFunctionStart is invoked (multicast)
 	}
 
-	void FunctionStop(int value)
+	public void FunctionStop(int value)
 	{
 		print("stop " + value);  // Will be called when onFunctionStop is invoked, receiving the passed value
 	}

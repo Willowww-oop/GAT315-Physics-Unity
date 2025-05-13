@@ -29,6 +29,8 @@ public class InputActionSO : ScriptableObject
 		{
 			case "Vector2":
 				action.performed += ctx => OnVector2Input?.Invoke(ctx.ReadValue<Vector2>());
+
+				//action.canceled += ctx => OnVector2Input?.Invoke(Vector2.zero);
 				break;
 			case "Axis":
 			case "Float":

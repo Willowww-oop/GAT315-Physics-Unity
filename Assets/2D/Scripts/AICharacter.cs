@@ -13,9 +13,9 @@ public class AICharacter : MonoBehaviour
 		Any
 	}
 
-	[SerializeField] CharacterController2DNext characterController;
+	[SerializeField] CharacterController2D characterController;
 	[SerializeField] AnimationEventRouter animationEventRouter;
-	public CharacterController2DNext CharacterController => characterController;
+	public CharacterController2D CharacterController => characterController;
 
 	GameObject target = null;
 	State state = State.Idle;
@@ -67,7 +67,7 @@ public class AICharacter : MonoBehaviour
 		state = State.Idle;
 		characterController.OnMove(new Vector2(0, 0));
 		yield return new WaitForSeconds(time);
-		characterController.OnMove(new Vector2(((Random.value <= 0.5f) ? CharacterController2D.FACE_LEFT : CharacterController2D.FACE_RIGHT), 0));
+		characterController.OnMove(new Vector2(((Random.value <= 0.5f) ? CharacterController2DNext.FACE_LEFT : CharacterController2DNext.FACE_RIGHT), 0));
 		state = State.Patrol;
 	}
 }

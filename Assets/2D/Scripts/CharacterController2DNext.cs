@@ -4,91 +4,95 @@ using UnityEngine;
 [DefaultExecutionOrder(-1000)]
 public class CharacterController2DNext : MonoBehaviour
 {
-	[SerializeField] float speed = 1;
-	[SerializeField] float jumpHeight = 2;
+    [SerializeField] float speed = 1;
+    [SerializeField] float jumpHeight = 2;
 
-	[SerializeField] ContactFilter2D groundFilter;
-	[SerializeField] Rigidbody2D.SlideMovement slideMovement = new Rigidbody2D.SlideMovement();
+    [SerializeField] ContactFilter2D groundFilter;
+    //[SerializeField] Rigidbody2D.SlideMovement slideMovement = new Rigidbody2D.SlideMovement();
 
-	// sprite
-	[SerializeField] Animator animator;
-	[SerializeField] SpriteRenderer spriteRenderer;
-	int facing = 1; // 1 = right, -1 = left
+    // sprite
+    Animator animator;
+    SpriteRenderer spriteRenderer;
 
-	public int Facing => facing;
-	// input
-	Vector2 moveInput = Vector2.zero;
-	public void SetMoveInput(Vector2 input) => moveInput = input;
+    public const float FACE_LEFT = -1f;
+    public const float FACE_RIGHT = 1f;
+    int facing = 1; // 1 = right, -1 = left
+    public int Facing => facing;
 
-	bool jumpInput = false;
-	public void SetJumpDown() => jumpInput = true;
 
-	Rigidbody2D rb;
-	Vector2 force;
-	bool isGrounded = false;
-	bool hasDoubleJump = false;
+    // input
+    Vector2 moveInput = Vector2.zero;
+    public void SetMoveInput(Vector2 input) => moveInput = input;
 
-	void Start()
-	{
-		rb = GetComponent<Rigidbody2D>();
-		animator = GetComponentInChildren<Animator>();
-		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-	}
+    bool jumpInput = false;
+    public void SetJumpDown() => jumpInput = true;
 
-	void Update()
-	{
-		isGrounded = slideMovement.selectedCollider.IsTouching(groundFilter);
-		if (isGrounded)
-		{
-			hasDoubleJump = true;
-		}
+    Rigidbody2D rb;
+    Vector2 force;
+    bool isGrounded = false;
+    bool hasDoubleJump = false;
 
-		Vector2 direction = Vector3.zero;
-		direction.x = moveInput.x;//Input.GetAxis("Horizontal");
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
 
-		force = direction * speed;
+    void Update()
+    {
+        //isGrounded = slideMovement.selectedCollider.IsTouching(groundFilter);
+        if (isGrounded)
+        {
+            hasDoubleJump = true;
+        }
 
-		if (jumpInput && (isGrounded || hasDoubleJump))
-		{
-			rb.linearVelocityY = 0;
-			rb.AddForce(Vector3.up * Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight * rb.gravityScale), ForceMode2D.Impulse);
+        Vector2 direction = Vector3.zero;
+        direction.x = moveInput.x;//Input.GetAxis("Horizontal");
 
-			if (!isGrounded && hasDoubleJump)
-			{
-				hasDoubleJump = false;
-			}
-		}
+        force = direction * speed;
 
-		if (moveInput.x != 0)
-		{
-			if (Mathf.Sign(moveInput.x) != facing)
-			{
-				FlipDirection();
-			}
-		}
+        if (jumpInput && (isGrounded || hasDoubleJump))
+        {
+            rb.linearVelocityY = 0;
+            rb.AddForce(Vector3.up * Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight * rb.gravityScale), ForceMode2D.Impulse);
 
-		animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
-		jumpInput = false;
-	}
+            if (!isGrounded && hasDoubleJump)
+            {
+                hasDoubleJump = false;
+            }
+        }
 
-	void FixedUpdate()
-	{
-		//rb.linearVelocity = new Vector2(force.x, rb.linearVelocity.y);
+        if (moveInput.x != 0)
+        {
+            if (Mathf.Sign(moveInput.x) != facing)
+            {
+                FlipDirection();
+            }
+        }
 
-		if (isGrounded)
-		{
-			var slideVelocity = new Vector2(force.x, rb.linearVelocity.y);
-			rb.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
-		}
-		else
-		{
-			rb.linearVelocityX = force.x;
-		}
-	}
+        animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+        jumpInput = false;
+    }
 
-	void FlipDirection()
-	{
-		facing *= -1;
-		spriteRenderer.flipX = (facing == -1);
-	}
+    void FixedUpdate()
+    {
+        //rb.linearVelocity = new Vector2(force.x, rb.linearVelocity.y);
+
+        if (isGrounded)
+        {
+            var slideVelocity = new Vector2(force.x, rb.linearVelocity.y);
+            //b.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
+        }
+        else
+        {
+            rb.linearVelocityX = force.x;
+        }
+    }
+
+    void FlipDirection()
+    {
+        facing *= -1;
+        spriteRenderer.flipX = (facing == -1);
+    }
 }

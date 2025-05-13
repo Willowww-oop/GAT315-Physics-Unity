@@ -2,15 +2,12 @@ using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("Player")]
+    [SerializeField] CharacterController2D characterController;
+    [SerializeField] AnimationEventRouter animationEventRouter;
+    [SerializeField] GameObject meleeWeaponL;
+    [SerializeField] GameObject meleeWeaponR;
+    [SerializeField] ObserverExample observerExample;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
